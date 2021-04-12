@@ -3,7 +3,6 @@ import images from '../gallery-items.js';
 const refs = {
   galleryContainer: document.querySelector('.js-gallery'),
   modalRef: document.querySelector('.js-lightbox'),
-  overlayRef: document.querySelector('.lightbox__overlay'),
   modalImgRef: document.querySelector('.lightbox__image'),
   modalCloseBtn: document.querySelector('.lightbox__button'),
   modalOverlay: document.querySelector('.lightbox__overlay'),
@@ -56,7 +55,7 @@ function onModalClose(e) {
   if (
     e.target.dataset.action !== 'close-lightbox' &&
     !e.target.classList.contains('lightbox__overlay') &&
-    !e.target.code === 'Escape'
+    e.code !== 'Escape'
   ) {
     return;
   }
