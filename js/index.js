@@ -67,10 +67,13 @@ function onModalClose(e) {
 
 function setModalImageAttributes(e) {
   if (refs.modalRef.classList.contains('is-open')) {
-    refs.modalImgRef.src = e.target.dataset.source;
-    refs.modalImgRef.alt = e.target.alt;
+    setImgAttributes(e.target.dataset.source, e.target.alt);
   } else {
-    refs.modalImgRef.src = '';
-    refs.modalImgRef.alt = '';
+    setImgAttributes('', '');
   }
+}
+
+function setImgAttributes(src, alt) {
+  refs.modalImgRef.src = src;
+  refs.modalImgRef.alt = alt;
 }
