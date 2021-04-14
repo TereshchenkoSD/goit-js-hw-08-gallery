@@ -18,8 +18,6 @@ refs.modalCloseBtn.addEventListener('click', onModalClose);
 
 refs.modalOverlay.addEventListener('click', onModalClose);
 
-window.addEventListener('keydown', onModalClose);
-
 function createGalleryList(images) {
   return images
     .map(({ preview, original, description }) => {
@@ -49,6 +47,10 @@ function onModalOpen(e) {
   refs.modalRef.classList.add('is-open');
 
   setModalImageAttributes(e);
+
+  window.addEventListener('keydown', onModalClose);
+
+  window.addEventListener('keydown', toggleImages);
 }
 
 function onModalClose(e) {
@@ -63,6 +65,9 @@ function onModalClose(e) {
   refs.modalRef.classList.remove('is-open');
 
   setModalImageAttributes(e);
+  window.removeEventListener('keydown', onModalClose);
+
+  window.removeEventListener('keydown', toggleImages);
 }
 
 function setModalImageAttributes(e) {
@@ -76,4 +81,51 @@ function setModalImageAttributes(e) {
 function setImgAttributes(src, alt) {
   refs.modalImgRef.src = src;
   refs.modalImgRef.alt = alt;
+}
+
+function toggleImages(e) {
+  let currentImg = refs.modalImgRef.src;
+  let currentIndex = 0;
+  const nextImg = e.code === 'ArrowRight';
+  const prevImg = e.code === 'ArrowLeft';
+
+  images.forEach((item, index) => {
+    const originalImg = item.original;
+    if (currentImg === originalImg) {
+      currentIndex = index;
+    }
+  });
+
+  if (nextImg && currentIndex < images.length - 1) {
+    currentIndex += 1;
+    setImgAttributes(
+      images[currentIndex].original,
+      images[currentIndex].description,
+    );
+    return;
+  }
+  if (nextImg && currentIndex === images.length - 1) {
+    currentIndex = 0;
+    setImgAttributes(
+      images[currentIndex].original,
+      images[currentIndex].description,
+    );
+    return;
+  }
+  if (prevImg && currentIndex > 0) {
+    currentIndex -= 1;
+    setImgAttributes(
+      images[currentIndex].original,
+      images[currentIndex].description,
+    );
+    return;
+  }
+  if (prevImg && currentIndex === 0) {
+    currentIndex = images.length - 1;
+    setImgAttributes(
+      images[currentIndex].original,
+      images[currentIndex].description,
+    );
+    return;
+  }
 }
